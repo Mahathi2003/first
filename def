@@ -63,4 +63,37 @@ const chrome = require('selenium-webdriver/chrome');
 })();
 
 
+
+
+
+const { Builder, By, Key, until } = require('selenium-webdriver');
+const chrome = require('selenium-webdriver/chrome');
+
+(async () => {
+    const driver = await new Builder().forBrowser('chrome').setChromeOptions(new chrome.Options()).build();
+
+    try {
+        // Set up: Open the file
+        await driver.get('file:///Users/saimahathisuryadevara/Desktop/heyy/program.html');
+
+        // Test: Click the increment button and verify the output
+        await driver.findElement(By.id('increment-button')).click();
+        let result = await driver.findElement(By.id('output')).getText();
+        
+        // Assert result
+        if (result !== '1') {
+            throw new Error(`Test failed: expected '1' but got '${result}'`);
+        }
+        
+        console.log('Test completed successfully');
+    } catch (error) {
+        console.error('Test failed:', error);
+    } finally {
+        // Wait for a bit before quitting to observe the result
+        console.log('Waiting for 10 seconds before exiting...');
+        await new Promise(resolve => setTimeout(resolve, 10000)); // Wait for 10 seconds
+        await driver.quit();
+    }
+})();
+
 node home.js
